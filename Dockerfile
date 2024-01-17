@@ -46,14 +46,14 @@ ARG EXTRA_DEPENDENCIES
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
-RUN apt update \
-    && apt upgrade -yq \
+RUN apt-get update \
+    && apt-get upgrade -yq \
     # Install general dependencies
-    && apt install -yq --no-install-recommends sudo openjdk-17-jdk openjdk-17-jre \
+    && apt-get install -yq --no-install-recommends sudo openjdk-17-jdk openjdk-17-jre \
     wget curl xz-utils zip unzip file socat clang libssl-dev \
     pkg-config git git-lfs bash-completion llvm \
     # Install Tauri dependencies as well as extra dependencies
-    && apt install -yq ${TAURI_DEPENDENCIES} ${EXTRA_DEPENDENCIES}
+    && apt-get install -yq ${TAURI_DEPENDENCIES} ${EXTRA_DEPENDENCIES}
 
 ######################################
 ## Android SDK
@@ -108,7 +108,7 @@ WORKDIR /mold
 ARG MOLD_VERSION
 
 # Install dependencies
-RUN apt update && apt install -yq zlib1g-dev cmake zlib1g-dev gcc g++
+RUN apt-get update && apt-get install -yq zlib1g-dev cmake zlib1g-dev gcc g++
 
 # Clone mold, build it then install it
 RUN git clone https://github.com/rui314/mold.git \
@@ -159,8 +159,8 @@ RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
 
 # Install Node.js
 RUN curl -sL "https://deb.nodesource.com/setup_${NODE_VERSION}.x" | bash -E - \
-    && apt update \
-    && apt install -yq nodejs \
+    && apt-get update \
+    && apt-get install -yq nodejs \
     && npm i -g npm \
     && npm i -g yarn \
     && npm i -g pnpm@${PNPM_VERSION}
@@ -169,7 +169,7 @@ RUN curl -sL "https://deb.nodesource.com/setup_${NODE_VERSION}.x" | bash -E - \
 RUN SHELL=bash pnpm setup
 
 # Clean up to reduce container size
-RUN apt clean \
+RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Run the rest of the commands as the non-root user
